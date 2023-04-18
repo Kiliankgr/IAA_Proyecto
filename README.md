@@ -3,4 +3,4 @@
 * make
 ## Ejecución
 * ./vocabulario
-* ./vocabulario <nombre del fichero>
+* ./vocabulario \<nombre del fichero>

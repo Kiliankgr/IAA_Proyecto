@@ -33,6 +33,7 @@ Vocabulario::Vocabulario(string _nFichero) {
     tratarLinea(linea);
     maxLineas--;
   }
+  //tratarLinea("algo.com kili+an gon(zal/ez");
   myfile.close();
   guardarDiccionario();
 }
@@ -46,11 +47,35 @@ void Vocabulario::guardarDiccionario(string _nFichero) {
 }
 
 void Vocabulario::tratarLinea(string _linea) {
+  regex regEliminarCaracteresEspeciales("[^a-zA-Z.,']");
+  regex regEliminarURL("[a-zA-Z]+([.][a-zA-Z]+)+");
   regex regExpresion("[a-zA-Z]+");
   smatch matches;
   string aux;
-  regex_search(_linea, matches, regExpresion);
+  stringstream ss(_linea);
   
+  cout << "\nLinea con URL:" << _linea;
+  _linea = "";
+  //eliminar URL
+  while(ss >> aux) {
+    if(regex_match(aux, regEliminarURL))
+      continue;
+    _linea += aux + " ";
+  }
+  cout << "\nLinea sin URL:" << _linea;
+  ss = stringstream(_linea);
+  _linea = "";
+  //Juntar palabras separadas por caracteres especiales
+  while (ss >> aux) {
+    for (auto ch : aux) {
+      if(isalpha(ch) || ch == ',' || ch == '.' || ch == '\'') {
+        _linea += ch;
+      }
+    }
+    _linea += " ";
+  }
+  cout << "\nLinea sin Especiales:" << _linea;
+
   while (regex_search(_linea, matches, regExpresion)) {
     aux = matches.str(0);
     
@@ -67,7 +92,7 @@ void Vocabulario::tratarLinea(string _linea) {
     _linea = matches.suffix().str();
     
   }
- 
+  
   //cin.get();
 }
 
@@ -81,4 +106,5 @@ int main(int argc, char* argv[]) {
     nFichero = argv[1];
   }
   Vocabulario voc(nFichero);
+  cout <<  endl;
 }

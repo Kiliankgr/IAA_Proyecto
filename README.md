@@ -2,5 +2,5 @@
 ## Compilación
 * make
 ## Ejecución
-* ./vocabulario
-* ./vocabulario \<nombre del fichero>
+* ./Aprendizaje
+* ./Aprendizaje \<nombre del fichero>

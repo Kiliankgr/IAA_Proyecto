@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 #include <regex>
-
+#include <math.h>
 
 
 //En un futuro podemos usar la libreria de nltk
@@ -14,10 +14,13 @@ class Vocabulario {
   protected:
     vector<string> palabrasReservadas = {"a","able","about","across","after","all","almost","also","am","among","an","and","any","are","as","at","be","because","been","but","by","can","cannot","could","dear","did","do","does","either","else","ever","every","for","from","get","got","had","has","have","he","her","hers","him","his","how","however","i","if","in","into","is","it","its","just","least","let","like","likely","may","me","might","most","must","my","neither","no","nor","not","of","off","often","on","only","or","other","our","own","rather","said","say","says","she","should","since","so","some","than","that","the","their","them","then","there","these","they","this","tis","to","too","twas","us","wants","was","we","were","what","when","where","which","while","who","whom","why","will","with","would","yet","you","your", "www"};
     set<string> diccionario; //contendrá todas las palabras
+    vector<string> noticiasPositivas;
+    vector<string> noticiasNegativas;
+    vector<string> noticiasNeutras;
     map<string,int> palabrasPositivas;
     map<string,int> palabrasNegativas;
     map<string,int> palabrasNeutras;
-    int tamVocabulario;
+    int tamVocabulario; //tamaño del vocabulario sin unknow
     int nPalabrasPositivas;
     int nPalabrasNegativas;
     int nPalabrasNeutras;
@@ -66,7 +69,7 @@ Vocabulario::Vocabulario(string _nFichero) {
     ss = stringstream(resultado);
     if ( tipoNoticia == 0) { //positive
       corpusPositivo << resultado << endl;
-      
+      noticiasPositivas.push_back(resultado);
       while(ss >> palabra) {
         
         if( palabrasPositivas.find(palabra) == palabrasPositivas.end() ) { //si no encuentra la palabra la añade
@@ -81,6 +84,7 @@ Vocabulario::Vocabulario(string _nFichero) {
     }
     if (tipoNoticia == 1) { //negative
       corpusNegativo << resultado << endl;
+      noticiasNegativas.push_back(resultado);
       while(ss >> palabra) {
         
         if( palabrasNegativas.find(palabra) == palabrasNegativas.end() ) { //si no encuentra la palabra la añade
@@ -95,6 +99,7 @@ Vocabulario::Vocabulario(string _nFichero) {
     }
     if (tipoNoticia == 2) { //neutral
       corpusNeutro << resultado << endl;
+      noticiasNeutras.push_back(resultado);
       while(ss >> palabra) {
         
         if( palabrasNeutras.find(palabra) == palabrasNeutras.end() ) { //si no encuentra la palabra la añade
@@ -112,7 +117,6 @@ Vocabulario::Vocabulario(string _nFichero) {
   //tratarLinea("algo.com kili+an gon(zal/ez S.r.l");
   //tratarLinea("The new company  DiaPol s.r.l.  would manufacture tools meant algo.com for glass and stone pre-processing .,neutral");
 
-  cout << "\nNumero de palabras positivas: " << palabrasPositivas.size() << endl;
   /*for (auto val : palabrasPositivas) {
     cout << val.first << " -> " << val.second;
   }*/
@@ -120,7 +124,8 @@ Vocabulario::Vocabulario(string _nFichero) {
   myfile.close();
   
   tamVocabulario = diccionario.size();
-
+  // añadimos unknow al diccionario
+  diccionario.insert("<unk>");
   guardarDiccionario();
 
   corpusNegativo.close();
@@ -131,6 +136,49 @@ Vocabulario::Vocabulario(string _nFichero) {
   ofstream modeloPositivo("modelo_lenguaje_P.txt");
   ofstream modeloNegativo("modelo_lenguaje_N.txt");
   ofstream modeloNeutro("modelo_lenguaje_T.txt");
+
+  //cabecera
+  modeloPositivo << "Número de documentos (noticias) del corpus: " << noticiasPositivas.size() << endl;
+  modeloPositivo << "Número de palabras del corpus: " << nPalabrasPositivas << endl;
+  modeloNegativo << "Número de documentos (noticias) del corpus: " << noticiasNegativas.size() << endl;
+  modeloNegativo << "Número de palabras del corpus: " << nPalabrasNegativas << endl;
+  modeloNeutro << "Número de documentos (noticias) del corpus: " << noticiasNeutras.size() << endl;
+  modeloNeutro << "Número de palabras del corpus: " << nPalabrasNeutras << endl;
+
+  
+  long double logProb; //logarimo neperiano de la probabilidad
+  
+  // modelo positivo
+  for (auto pal : palabrasPositivas) {
+    //logProb = log((pal.second + 1)/(nPalabrasPositivas + tamVocabulario + 1));
+
+    logProb = (long double)(pal.second +1)/(tamVocabulario + 1 + nPalabrasPositivas);
+    logProb = log(logProb);
+
+    modeloPositivo << "Palabra: " << pal.first << " Frec: " << pal.second << " LogProb: " << logProb << endl;
+  }
+
+  // modelo negativo
+  for (auto pal : palabrasNegativas) {
+    //logProb = log((pal.second + 1)/(nPalabrasPositivas + tamVocabulario + 1));
+
+    logProb = (long double)(pal.second +1)/(tamVocabulario + 1 + nPalabrasNegativas);
+    logProb = log(logProb);
+
+    modeloNegativo << "Palabra: " << pal.first << " Frec: " << pal.second << " LogProb: " << logProb << endl;
+  }
+
+  // modelo positivo
+  for (auto pal : palabrasNeutras) {
+    //logProb = log((pal.second + 1)/(nPalabrasPositivas + tamVocabulario + 1));
+
+    logProb = (long double)(pal.second +1)/(tamVocabulario + 1 + nPalabrasNeutras);
+    logProb = log(logProb);
+
+    modeloNeutro << "Palabra: " << pal.first << " Frec: " << pal.second << " LogProb: " << logProb << endl;
+  }
+
+  
 }
 
 void Vocabulario::guardarDiccionario(string _nFichero) {

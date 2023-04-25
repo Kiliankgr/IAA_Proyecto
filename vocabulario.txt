@@ -1,4 +1,4 @@
-Numero de palabras: 6142
+Numero de palabras: 6138
 aaland
 aalto
 aaron
@@ -3554,7 +3554,6 @@ nederland
 need
 needed
 needs
-negative
 negotiating
 negotiations
 neighboring
@@ -3573,7 +3572,6 @@ network
 networking
 networks
 neudorf
-neutral
 nevertheless
 nevsky
 new
@@ -4126,7 +4124,6 @@ porvoo
 position
 positioned
 positions
-positive
 possession
 possibilities
 possibility
@@ -5831,7 +5828,6 @@ utility
 uutislehti
 uwe
 uzbek
-v
 va
 vaahto
 vaalipalveluservice

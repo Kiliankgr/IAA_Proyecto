@@ -7,7 +7,7 @@
 #include "vocabulario.h"
 #include "clasificador.h"
 
-
+void comprobarResultadosClasificador(Vocabulario voc1,string _nFichero);
 using namespace std;
 int main(int argc, char* argv[]) {
   
@@ -19,11 +19,11 @@ int main(int argc, char* argv[]) {
     } 
     nFichero = argv[1];
   }
-  //Vocabulario voc(nFichero);
+  Vocabulario voc1(nFichero);
   
   cout << "\nVocabulario implementado, procedemos a clasificar";
 
-  cout << "\n¿Quiere introducir el nombre del fichero de prueba?, sino se buscará el fichero <F75_test.csv>(0 -> no, 1 -> si)";
+  cout << "\n¿Quiere introducir el nombre del fichero de prueba?, sino se buscará el fichero <F75_test.csv>(0 -> no, 1 -> si): ";
   string opcion;
   do{
     cin >> opcion;
@@ -35,13 +35,19 @@ int main(int argc, char* argv[]) {
     } else {
     nFichero = "F75_test.csv";
   }
-  
+
+  comprobarResultadosClasificador(voc1, nFichero);
   //Clasificador clasificador(voc, nFichero);
+
+  
+}
+
+void comprobarResultadosClasificador(Vocabulario voc1, string nFicheroValidacion) {
 
   //Ahora comparamos los resultados del clasificador con los valores correctos
   //primero con  F75_train.csv
   vector<string> resultadosCorrectos;
-  ifstream ficheroResultados("F75_train.csv");
+  ifstream ficheroResultados(nFicheroValidacion);
   regex resultadoExpresion("[a-zA-Z]+$");
   smatch matches;
   string linea;
@@ -61,25 +67,26 @@ int main(int argc, char* argv[]) {
       resultadosCorrectos.push_back("T");
     }
   }
-  cout << "\nprueba con train";
-  cin.get();
+  ficheroResultados.close();
+  cout << "\nFichero abierto correcatamente. Pulse enter para proceder a validar";
+  cin.get(); //es curioso pero al parecer este cin.get() realmente se ejecuta despues de parte de la construccion de clasificador1;
   
-  Vocabulario voc1("F75_train.csv");
-  //Le pasamos al clasificador el fichero sin la clase
-  Clasificador clasificador1(voc1, "F75_train_noClase.csv");
+  
+  //Le pasamos al clasificador al fichero sin la clase
+  Clasificador clasificador1(voc1, nFicheroValidacion);
   
   //comparamos
   cout << "\nResultados size: " << resultadosCorrectos.size();
   for(int i = 0; i < resultadosCorrectos.size(); i++) {
     if (resultadosCorrectos[i] == clasificador1.resultadosSupuestos[i]) {
       aciertos++;
-      cout << "\nacerté";
     }
   }
   probabilidad = aciertos;
   probabilidad = (double) probabilidad / resultadosCorrectos.size();
   probabilidad = probabilidad * 100;
-  cout << "\nProbabilidad: " << probabilidad << " Numero de aciertos" << aciertos;
+  cout << "\nProbabilidad: " << probabilidad << " Numero de aciertos: " << aciertos;
   
   cout <<  endl;
+
 }

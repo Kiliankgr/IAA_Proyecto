@@ -40,6 +40,7 @@ Clasificador::Clasificador(Vocabulario _vocabulario, string _nFichero) {
       break;
     }
     linea = voc.tratarLinea(linea);
+    //cout << "\nClasificador, linea resultante del tratamiento: " << linea;
     noticias.push_back(linea);
     a++;
   }
@@ -60,7 +61,7 @@ Clasificador::Clasificador(Vocabulario _vocabulario, string _nFichero) {
   vector<string> modelos = {"P", "N", "T"};
   int modeloMasProbable;
   for (auto noticia : noticias) {
-    cout << "\nLeemos noticia: " << noticia;
+    //cout << "\nLeemos noticia: " << noticia;
     inicioNoticia = noticia.substr(0,10);
     probabilidadesRedondeadas.clear();
 

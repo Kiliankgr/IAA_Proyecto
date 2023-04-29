@@ -1,2 +1,2 @@
 all:
-	g++ -O -w -std=c++17 vocabulario.cc -o Aprendizaje
+	g++ -O -w -std=c++17 main.cc vocabulario.h clasificador.h -o Aprendizaje

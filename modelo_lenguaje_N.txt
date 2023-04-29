@@ -1,5 +1,6 @@
 Número de documentos (noticias) del corpus: 310
 Número de palabras del corpus: 3857
+Palabra: <unk> Frec: 0 LogProb: -9.20994
 Palabra: aaland Frec: 1 LogProb: -8.51679
 Palabra: ab Frec: 3 LogProb: -7.82365
 Palabra: abp Frec: 2 LogProb: -8.11133

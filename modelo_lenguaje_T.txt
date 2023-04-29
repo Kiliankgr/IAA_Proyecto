@@ -1,5 +1,6 @@
 Número de documentos (noticias) del corpus: 1563
 Número de palabras del corpus: 17906
+Palabra: <unk> Frec: 0 LogProb: -10.0877
 Palabra: aalto Frec: 1 LogProb: -9.39454
 Palabra: aaron Frec: 1 LogProb: -9.39454
 Palabra: ab Frec: 6 LogProb: -8.14177

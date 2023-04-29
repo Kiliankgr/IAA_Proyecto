@@ -1,5 +1,6 @@
 Número de documentos (noticias) del corpus: 627
 Número de palabras del corpus: 8319
+Palabra: <unk> Frec: 0 LogProb: -9.579
 Palabra: ab Frec: 4 LogProb: -7.96957
 Palabra: abb Frec: 2 LogProb: -8.48039
 Palabra: ability Frec: 1 LogProb: -8.88586

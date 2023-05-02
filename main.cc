@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
   
   cout << "\nVocabulario implementado, procedemos a clasificar";
 
-  cout << "\n¿Quiere introducir el nombre del fichero de prueba?, sino se buscará el fichero <F75_test.csv>(0 -> no, 1 -> si): ";
+  cout << "\n¿Quiere introducir el nombre del fichero de validación?, sino se buscará el fichero <F75_test.csv>(0 -> no, 1 -> si): ";
   string opcion;
   do{
     cin >> opcion;
@@ -36,11 +36,23 @@ int main(int argc, char* argv[]) {
     nFichero = "F75_test.csv";
   }
 
-  comprobarResultadosClasificador(voc1, nFichero);
-  //Clasificador clasificador(voc, nFichero);
-
+  cout << "\n¿Quieres mostrar el porcentaje de aciertos(Esto solo funcionará si el fichero de validación poseía la clase)(0 -> no, 1 -> si): ";
   
+  do{
+    cin >> opcion;
+  } while (opcion != "1" && opcion != "0" );
+  
+  if (opcion == "1") {
+    comprobarResultadosClasificador(voc1, nFichero);
+  } else {
+    Clasificador clasificador1(voc1, nFichero);
+  }
+  cout << endl;
 }
+
+/**
+ * Funcion que se le pasa un fichero de validacion con las respuestas y este compara la prediccion del clasificador con las reales
+*/
 
 void comprobarResultadosClasificador(Vocabulario voc1, string nFicheroValidacion) {
 
@@ -68,8 +80,8 @@ void comprobarResultadosClasificador(Vocabulario voc1, string nFicheroValidacion
     }
   }
   ficheroResultados.close();
-  cout << "\nFichero abierto correcatamente. Pulse enter para proceder a validar";
-  cin.get(); //es curioso pero al parecer este cin.get() realmente se ejecuta despues de parte de la construccion de clasificador1;
+  cout << "\nFichero abierto correctamente.";
+  //cin.get(); //es curioso pero al parecer este cin.get() realmente se ejecuta despues de parte de la construccion de clasificador1;
   
   
   //Le pasamos al clasificador al fichero sin la clase
